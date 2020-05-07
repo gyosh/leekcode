@@ -19,7 +19,6 @@ def main():
         content = f.read()
 
     p = Problem(content)
-    generator = Cpp(p)
-    generator.generate()
+    Cpp.generate(p)
 
 main()
