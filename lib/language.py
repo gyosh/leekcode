@@ -88,11 +88,11 @@ class Cpp:
 
     def get_value_for_init(self, value):
         if type(value) is int:
-            return value
+            return str(value)
         elif type(value) is str:
             return '"' + value + '"'
         elif type(value) is bool:
-            return value.lower()
+            return str(value).lower()
         elif type(value) is list:
             return '{' + ','.join([self.get_value_for_init(x) for x in value]) + '}'
         return '?'
