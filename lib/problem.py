@@ -78,9 +78,9 @@ class Problem:
                 vtype = VType(VType.BOOLEAN)
                 value = True if c == 't' else False
                 it.skip(str(value).lower())
-            elif ('0' <= c) and (c <= '9'):
+            elif (c == '-') or (('0' <= c) and (c <= '9')):
                 vtype = VType(VType.INTEGER)
-                value = int(it.skip_r(r'[0-9]+'))
+                value = int(it.skip_r(r'[-0-9]+'))
             else:
                 vtype = VType(VType.LIST)
                 value = []
