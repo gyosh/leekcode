@@ -6,7 +6,7 @@ class Cpp:
     def generate(problem):
         io_spec = problem.io_spec
         output_vtype = io_spec.output_vtype;
-        result = template_cpp.format(
+        return template_cpp.format(
                 method_name=problem.method_name,
                 output_type=Cpp.format_type(output_vtype),
                 input_params=Cpp.format_input_params(io_spec),
@@ -14,7 +14,6 @@ class Cpp:
                 n_testcases=len(problem.testcases),
                 testcases=Cpp.format_testcases(problem.method_name, problem.testcases)
             )
-        print(result)
      
 
     @staticmethod
@@ -100,4 +99,50 @@ class Cpp:
             return '{' + ','.join([Cpp.format_value_for_init(x) for x in value]) + '}'
         return '?'
 
-    
+
+class Py:
+    @staticmethod
+    def generate(problem):
+        io_spec = problem.io_spec
+        output_vtype = io_spec.output_vtype;
+        return template_py.format(
+                method_name=problem.method_name,
+                input_params=', '.join(io_spec.input_names),
+                n_testcases=len(problem.testcases),
+                testcases=Py.format_testcases(problem.method_name, problem.testcases)
+            )
+
+
+    @staticmethod
+    def format_testcases(method_name, testcases):
+        results = []
+        for tc in testcases:
+            io_spec = tc.io_spec
+            input_inits = []
+            for i in range(io_spec.get_input_size()):
+                input_inits.append('{} = {};'.format(
+                    io_spec.input_names[i],
+                    Py.format_value_for_init(tc.inputs[i])
+                ))
+
+            results.append(template_testcases_py.format(
+                tc_name=tc.title,
+                inputs_init='\n    '.join(input_inits),
+                output_value=Py.format_value_for_init(tc.output),
+                method_name=method_name,
+                param_names=', '.join(io_spec.input_names)
+            ))
+        return '\n'.join(results)
+
+
+    @staticmethod
+    def format_value_for_init(value):
+        if type(value) is int:
+            return str(value)
+        elif type(value) is str:
+            return "'" + value + "'"
+        elif type(value) is bool:
+            return str(value)
+        elif type(value) is list:
+            return '[' + ','.join([Py.format_value_for_init(x) for x in value]) + ']'
+        return '?'

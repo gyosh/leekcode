@@ -3,8 +3,7 @@ import logging
 import argparse
 
 from lib.problem import Problem
-from lib.language import Cpp
-
+from lib.language import Cpp, Py
 
 def main():
     parser = argparse.ArgumentParser(description='.')
@@ -19,6 +18,10 @@ def main():
         content = f.read()
 
     p = Problem(content)
-    Cpp.generate(p)
+
+    if args.language == 'cpp':
+        print(Cpp.generate(p))
+    else:
+        print(Py.generate(p))
 
 main()

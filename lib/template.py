@@ -1,6 +1,11 @@
-template_cpp = '''// Generated
-#include <bits/stdc++.h>
+template_cpp = '''#include <bits/stdc++.h>
 using namespace std;
+
+// ----- BEGIN CUT HERE -----
+#define REP(a,b) for (int a = 0; a < b; a++)
+#define FOR(a,b,c) for (int a = b; a < c; a++)
+#define RESET(a,b) memset(a,b,sizeof(a))
+#define LL long long
 
 class Solution {{
 public:
@@ -9,6 +14,7 @@ public:
   }}
 }};
 
+// ------ END CUT HERE ------
 {helper_functions}
 
 int main() {{
@@ -70,4 +76,38 @@ string outputToStr{depth}(vector<{child_type}> &output) {{
   s += "]";
   return s;  
 }}
+'''
+
+
+template_py = '''# ----- BEGIN CUT HERE -----
+class Solution:
+    def {method_name}(self, {input_params}):
+
+
+# ------ END CUT HERE ------
+
+solution = Solution()
+
+nTc = {n_testcases}
+passing = 0
+
+{testcases}
+
+if passing == nTc:
+    print('ALL PASSING YO')
+else:
+    print('SOMETHING IS BAD MAN')
+
+'''
+
+template_testcases_py = '''
+{inputs_init}
+expected = {output_value};
+answer = solution.{method_name}({param_names});
+if expected == answer:
+    passing += 1
+else:
+    print('Error at `{tc_name}`')
+    print('Expected: {{}}'.format(str(expected)))
+    print('Got     : {{}}'.format(str(answer)))
 '''
