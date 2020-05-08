@@ -127,7 +127,7 @@ class Problem:
             return s[0]        
 
         # Try Python
-        s = re.findall(r'(?s)class Solution\(object\):\n\sdef ([_a-zA-Z0-9]+)', problem_html)
+        s = re.findall(r'(?s)class Solution\(object\):\n\s+def ([_a-zA-Z0-9]+)', problem_html)
         if s:
             return s[0]        
 

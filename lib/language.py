@@ -129,7 +129,7 @@ class Py:
 
             results.append(template_testcases_py.format(
                 tc_name=tc.title,
-                inputs_init='\n    '.join(input_inits),
+                inputs_init='\n'.join(input_inits),
                 output_value=Py.format_value_for_init(tc.output),
                 method_name=method_name,
                 param_names=', '.join(io_spec.input_names)
