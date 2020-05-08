@@ -7,6 +7,7 @@ class Cpp:
         io_spec = problem.io_spec
         output_vtype = io_spec.output_vtype;
         return template_cpp.format(
+                problem_title=problem.title,
                 method_name=problem.method_name,
                 output_type=Cpp.format_type(output_vtype),
                 input_params=Cpp.format_input_params(io_spec),
@@ -106,6 +107,7 @@ class Py:
         io_spec = problem.io_spec
         output_vtype = io_spec.output_vtype;
         return template_py.format(
+                problem_title=problem.title,
                 method_name=problem.method_name,
                 input_params=', '.join(io_spec.input_names),
                 n_testcases=len(problem.testcases),

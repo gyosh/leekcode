@@ -16,6 +16,7 @@ from .testcase import TestCase
 class Problem:
     def __init__(self, problem_html):
         self.html = problem_html
+        self.title = re.findall(r'<title>(.*?)</title>', problem_html)[0]
         self.io_spec, self.testcases = self.__unpack_testcases(problem_html)
         self.method_name = self.__extract_method_name(problem_html)
         logging.info(self.method_name)
@@ -116,12 +117,18 @@ class Problem:
 
     def __extract_method_name(self, problem_html):
         # Try C++
-        s = re.findall(r'(?s)public:\n    [^ ]+ ([_a-zA-Z0-9]+)', problem_html)
+        s = re.findall(r'(?s)public:\n\s+[^ ]+ ([_a-zA-Z0-9]+)', problem_html)
+        if s:
+            return s[0]        
+
+        # Try Python3
+        s = re.findall(r'(?s)class Solution:\n\s+def ([_a-zA-Z0-9]+)', problem_html)
         if s:
             return s[0]        
 
         # Try Python
-        s = re.findall(r'(?s)class Solution:\n    def ([_a-zA-Z0-9]+)', problem_html)
+        s = re.findall(r'(?s)class Solution\(object\):\n\sdef ([_a-zA-Z0-9]+)', problem_html)
         if s:
             return s[0]        
+
         raise Exception('Unknown solution method name!')

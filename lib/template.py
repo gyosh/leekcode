@@ -1,4 +1,5 @@
-template_cpp = '''#include <bits/stdc++.h>
+template_cpp = '''// {problem_title}
+#include <bits/stdc++.h>
 using namespace std;
 
 // ----- BEGIN CUT HERE -----
@@ -79,7 +80,8 @@ string outputToStr{depth}(vector<{child_type}> &output) {{
 '''
 
 
-template_py = '''# ----- BEGIN CUT HERE -----
+template_py = '''# {problem_title}
+# ----- BEGIN CUT HERE -----
 class Solution:
     def {method_name}(self, {input_params}):
 
