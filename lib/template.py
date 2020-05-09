@@ -3,10 +3,14 @@ template_cpp = '''// {problem_title}
 using namespace std;
 
 // ----- BEGIN CUT HERE -----
+
 #define REP(a,b) for (int a = 0; a < b; a++)
 #define FOR(a,b,c) for (int a = b; a < c; a++)
 #define RESET(a,b) memset(a,b,sizeof(a))
 #define LL long long
+
+const int INF = 2123123123;
+const int MOD = 1000000007;
 
 class Solution {{
 public:
@@ -21,32 +25,39 @@ public:
 int main() {{
   Solution solution = Solution();
 
-  int nTc = {n_testcases};
+  int nTc = 0;
   int passing = 0;
-
+  {variable_init}
   {testcases}
 
   if (passing == nTc) {{
-    printf("ALL PASSING YO\\n");
+    printf("THERE IS NO ERROR\\n");
   }} else {{
-    printf("SOMETHING IS BAD MAN\\n");
+    printf("SOMETHING IS BAD YO\\n");
   }}
 }}
 '''
 
 template_testcases_cpp = '''
-  {{
-    {inputs_init}
-    {output_type} expected = {output_value};
-    {output_type} answer = solution.{method_name}({param_names});
-    if (expected == answer) {{
-      passing++;
-    }} else {{
-      printf("Error at `{tc_name}`\\n");
-      printf("Expected: %s\\n", outputToStr(expected).c_str());
-      printf("Got     : %s\\n\\n", outputToStr(answer).c_str());
-    }}
-  }}'''
+  nTc++;
+  {inputs_init}
+  __expected = {output_value};
+  __answer = solution.{method_name}({param_names});
+'''
+
+template_assertion_cpp = '''  if (__expected == __answer) {{
+    passing++;
+  }} else {{
+    printf("Error at `{tc_name}`\\n");
+    printf("__expected: %s\\n", outputToStr(__expected).c_str());
+    printf("Got     : %s\\n\\n", outputToStr(__answer).c_str());
+  }}
+'''
+
+template_no_assertion_cpp = '''  printf("On `{tc_name}`\\n");
+  printf("Got: %s\\n\\n", outputToStr(__answer).c_str());
+  passing++;
+'''
 
 cpp_print_boolean = '''
 string outputToStr{depth}(bool output) {{
@@ -81,7 +92,13 @@ string outputToStr{depth}(vector<{child_type}> &output) {{
 
 
 template_py = '''# {problem_title}
+from collections import *
+
 # ----- BEGIN CUT HERE -----
+
+MOD = 1000000007
+INF = 2123123123
+
 class Solution:
     def {method_name}(self, {input_params}):
 
@@ -90,26 +107,34 @@ class Solution:
 
 solution = Solution()
 
-nTc = {n_testcases}
+nTc = 0
 passing = 0
 
 {testcases}
 
 if passing == nTc:
-    print('ALL PASSING YO')
+    print('THERE IS NO ERROR')
 else:
-    print('SOMETHING IS BAD MAN')
+    print('SOMETHING IS BAD YO')
 
 '''
 
 template_testcases_py = '''
+nTc += 1
 {inputs_init}
-expected = {output_value};
-answer = solution.{method_name}({param_names});
-if expected == answer:
+__expected = {output_value}
+__answer = solution.{method_name}({param_names})
+'''
+
+template_assertion_py = '''if __expected == __answer:
     passing += 1
 else:
     print('Error at `{tc_name}`')
-    print('Expected: {{}}'.format(str(expected)))
-    print('Got     : {{}}'.format(str(answer)))
+    print('__expected: {{}}'.format(str(__expected)))
+    print('Got     : {{}}'.format(str(__answer)))
+'''
+
+template_no_assertion_py = '''print('On `{tc_name}`')
+print('Got: {{}}'.format(str(__answer)))
+passing += 1
 '''

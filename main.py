@@ -5,10 +5,14 @@ import argparse
 from lib.problem import Problem
 from lib.language import Cpp, Py
 
+LANG_CPP = 'cpp'
+LANG_PYTHON = 'py'
+
 def main():
     parser = argparse.ArgumentParser(description='.')
     parser.add_argument('input');
-    parser.add_argument('-l', '--language', choices=['cpp', 'py'], required=True);
+    parser.add_argument('-l', '--language', choices=[LANG_PYTHON, LANG_CPP], required=True, help='Language of the template to generate');
+    parser.add_argument('-x', '--skip-check', action='store_true', help='If set, will not check output with expected output. Use this for multiple possible output problems.');
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)
@@ -19,9 +23,12 @@ def main():
 
     p = Problem(content)
 
-    if args.language == 'cpp':
-        print(Cpp.generate(p))
+    if args.skip_check:
+        logging.info('Using skip check mode')
+
+    if args.language == LANG_CPP:
+        print(Cpp.generate(p, args.skip_check))
     else:
-        print(Py.generate(p))
+        print(Py.generate(p, args.skip_check))
 
 main()

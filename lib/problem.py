@@ -33,7 +33,7 @@ class Problem:
 
             it.seek('<pre><strong>Input:</strong>')
             input_s = it.seek('<strong>Output:</strong>')
-            output_s = it.seek_one(['<strong>', '</pre>'])
+            output_s = it.seek_one(['<strong>', '<b>', '</pre>'])
 
             if title in seen_title:
                 continue
@@ -87,7 +87,7 @@ class Problem:
                 value = []
                 it.skip('[')
                 element_type = None
-                while True:
+                while it.current_char() != ']':
                     element_type, element_value = parse_type_and_value()
                     value.append(element_value)
                     if not it.can_skip(','):

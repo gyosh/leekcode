@@ -3,17 +3,26 @@ from .vtype import VType
 
 class Cpp:
     @staticmethod
-    def generate(problem):
+    def generate(problem, skip_check):
         io_spec = problem.io_spec
         output_vtype = io_spec.output_vtype;
+
+        var_inits = []
+        for i in range(io_spec.get_input_size()):
+            var_inits.append('{} {};'.format(
+                Cpp.format_type(io_spec.input_vtypes[i]),
+                io_spec.input_names[i]
+            ))
+        var_inits.append('{} __expected, __answer;'.format(Cpp.format_type(output_vtype)));
+
         return template_cpp.format(
                 problem_title=problem.title,
                 method_name=problem.method_name,
+                variable_init='\n  '.join(var_inits),
                 output_type=Cpp.format_type(output_vtype),
                 input_params=Cpp.format_input_params(io_spec),
                 helper_functions=Cpp.format_display_function(output_vtype),
-                n_testcases=len(problem.testcases),
-                testcases=Cpp.format_testcases(problem.method_name, problem.testcases)
+                testcases=Cpp.format_testcases(problem.method_name, problem.testcases, skip_check)
             )
      
 
@@ -30,26 +39,29 @@ class Cpp:
 
 
     @staticmethod
-    def format_testcases(method_name, testcases):
+    def format_testcases(method_name, testcases, skip_check):
         results = []
         for tc in testcases:
             io_spec = tc.io_spec
             input_inits = []
             for i in range(io_spec.get_input_size()):
-                input_inits.append('{} {} = {};'.format(
-                    Cpp.format_type(io_spec.input_vtypes[i]),
+                input_inits.append('{} = {};'.format(
                     io_spec.input_names[i],
                     Cpp.format_value_for_init(tc.inputs[i])
                 ))
 
-            results.append(template_testcases_cpp.format(
-                tc_name=tc.title,
+            tc_block = template_testcases_cpp.format(
                 inputs_init='\n    '.join(input_inits),
                 output_type=Cpp.format_type(io_spec.output_vtype),
                 output_value=Cpp.format_value_for_init(tc.output),
                 method_name=method_name,
                 param_names=', '.join(io_spec.input_names)
-            ))
+            )
+            if skip_check:
+                tc_block += template_no_assertion_cpp.format(tc_name=tc.title)
+            else:
+                tc_block += template_assertion_cpp.format(tc_name=tc.title)
+            results.append(tc_block)
         return '\n'.join(results)
 
 
@@ -103,20 +115,19 @@ class Cpp:
 
 class Py:
     @staticmethod
-    def generate(problem):
+    def generate(problem, skip_check):
         io_spec = problem.io_spec
         output_vtype = io_spec.output_vtype;
         return template_py.format(
                 problem_title=problem.title,
                 method_name=problem.method_name,
                 input_params=', '.join(io_spec.input_names),
-                n_testcases=len(problem.testcases),
-                testcases=Py.format_testcases(problem.method_name, problem.testcases)
+                testcases=Py.format_testcases(problem.method_name, problem.testcases, skip_check)
             )
 
 
     @staticmethod
-    def format_testcases(method_name, testcases):
+    def format_testcases(method_name, testcases, skip_check):
         results = []
         for tc in testcases:
             io_spec = tc.io_spec
@@ -127,13 +138,19 @@ class Py:
                     Py.format_value_for_init(tc.inputs[i])
                 ))
 
-            results.append(template_testcases_py.format(
-                tc_name=tc.title,
+            tc_block = template_testcases_py.format(
                 inputs_init='\n'.join(input_inits),
                 output_value=Py.format_value_for_init(tc.output),
                 method_name=method_name,
                 param_names=', '.join(io_spec.input_names)
-            ))
+            )
+
+            if skip_check:
+                tc_block += template_no_assertion_py.format(tc_name=tc.title)
+            else:
+                tc_block += template_assertion_py.format(tc_name=tc.title)
+
+            results.append(tc_block)
         return '\n'.join(results)
 
 
