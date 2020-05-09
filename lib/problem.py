@@ -1,4 +1,5 @@
 import re
+import html
 import logging
 
 from .phrase_iterator import PhraseIterator
@@ -39,8 +40,8 @@ class Problem:
                 continue
             seen_title.add(title)
 
-            input_s = input_s.strip()
-            output_s = output_s.strip()
+            input_s = html.unescape(input_s).strip()
+            output_s = html.unescape(output_s).strip()
 
             input_vars = self.__extract_variables(input_s)
             output = self.__extract_variables(output_s, value_only=True)[0]
@@ -73,7 +74,13 @@ class Problem:
             if c == '"':
                 vtype = VType(VType.STRING)
                 it.skip('"')
-                value = it.skip_r(r'[^"]+')
+                value = ''
+                # Process per escape section
+                while it.current_char() != '"':
+                    value += it.skip_r(r'[^\\"]+')
+                    if it.current_char() == '\\':
+                        it.next_char()
+                        value += it.next_char()
                 it.skip('"')
             elif c in 'tf':
                 vtype = VType(VType.BOOLEAN)
