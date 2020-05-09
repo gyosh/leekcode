@@ -24,6 +24,8 @@ Python 3.
 
 # Example Template
 
+From [Problem 1438: Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit](https://leetcode.com/contest/weekly-contest-187/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/).
+
 ```python
 from collections import *
 
