@@ -9,8 +9,8 @@ LANG_CPP = 'cpp'
 LANG_PYTHON = 'py'
 
 def main():
-    parser = argparse.ArgumentParser(description='.')
-    parser.add_argument('input');
+    parser = argparse.ArgumentParser(description='Generate template for Leetcode\'s contest problem, to ease coding & testing.')
+    parser.add_argument('input', help='The html file for downloaded problem page');
     parser.add_argument('-l', '--language', choices=[LANG_PYTHON, LANG_CPP], required=True, help='Language of the template to generate');
     parser.add_argument('-x', '--skip-check', action='store_true', help='If set, will not check output with expected output. Use this for multiple possible output problems.');
     args = parser.parse_args()

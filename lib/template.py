@@ -31,9 +31,9 @@ int main() {{
   {testcases}
 
   if (passing == nTc) {{
-    printf("THERE IS NO ERROR\\n");
+    printf("No error!\\n");
   }} else {{
-    printf("SOMETHING IS BAD YO\\n");
+    printf("FAIL!!!\\n");
   }}
 }}
 '''
@@ -113,9 +113,9 @@ passing = 0
 {testcases}
 
 if passing == nTc:
-    print('THERE IS NO ERROR')
+    print('No error!')
 else:
-    print('SOMETHING IS BAD YO')
+    print('FAIL!!!')
 
 '''
 
