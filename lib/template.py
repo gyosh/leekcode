@@ -49,7 +49,7 @@ template_assertion_cpp = '''  if (__expected == __answer) {{
     passing++;
   }} else {{
     printf("Error at `{tc_name}`\\n");
-    printf("__expected: %s\\n", outputToStr(__expected).c_str());
+    printf("Expected: %s\\n", outputToStr(__expected).c_str());
     printf("Got     : %s\\n\\n", outputToStr(__answer).c_str());
   }}
 '''
@@ -130,7 +130,7 @@ template_assertion_py = '''if __expected == __answer:
     passing += 1
 else:
     print('Error at `{tc_name}`')
-    print('__expected: {{}}'.format(str(__expected)))
+    print('Expected: {{}}'.format(str(__expected)))
     print('Got     : {{}}'.format(str(__answer)))
 '''
 
