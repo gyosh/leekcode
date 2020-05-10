@@ -23,7 +23,7 @@ public:
 {helper_functions}
 
 int main() {{
-  Solution solution = Solution();
+  Solution solution;
 
   int nTc = 0;
   int passing = 0;
@@ -39,23 +39,24 @@ int main() {{
 '''
 
 template_testcases_cpp = '''
+  solution = Solution();
   nTc++;
   {inputs_init}
-  __expected = {output_value};
-  __answer = solution.{method_name}({param_names});
+  _expected = {output_value};
+  _answer = solution.{method_name}({param_names});
 '''
 
-template_assertion_cpp = '''  if (__expected == __answer) {{
+template_assertion_cpp = '''  if (_expected == _answer) {{
     passing++;
   }} else {{
     printf("Error at `{tc_name}`\\n");
-    printf("Expected: %s\\n", outputToStr(__expected).c_str());
-    printf("Got     : %s\\n\\n", outputToStr(__answer).c_str());
+    printf("Expected: %s\\n", outputToStr(_expected).c_str());
+    printf("Got     : %s\\n\\n", outputToStr(_answer).c_str());
   }}
 '''
 
 template_no_assertion_cpp = '''  printf("On `{tc_name}`\\n");
-  printf("Got: %s\\n\\n", outputToStr(__answer).c_str());
+  printf("Got: %s\\n\\n", outputToStr(_answer).c_str());
   passing++;
 '''
 
@@ -105,8 +106,6 @@ class Solution:
 
 # ------ END CUT HERE ------
 
-solution = Solution()
-
 nTc = 0
 passing = 0
 
@@ -120,21 +119,22 @@ else:
 '''
 
 template_testcases_py = '''
+solution = Solution()
 nTc += 1
 {inputs_init}
-__expected = {output_value}
-__answer = solution.{method_name}({param_names})
+_expected = {output_value}
+_answer = solution.{method_name}({param_names})
 '''
 
-template_assertion_py = '''if __expected == __answer:
+template_assertion_py = '''if _expected == _answer:
     passing += 1
 else:
     print('Error at `{tc_name}`')
-    print('Expected: {{}}'.format(str(__expected)))
-    print('Got     : {{}}'.format(str(__answer)))
+    print('Expected: {{}}'.format(str(_expected)))
+    print('Got     : {{}}\\n'.format(str(_answer)))
 '''
 
 template_no_assertion_py = '''print('On `{tc_name}`')
-print('Got: {{}}'.format(str(__answer)))
+print('Got: {{}}\\n'.format(str(_answer)))
 passing += 1
 '''
