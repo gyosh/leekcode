@@ -5,7 +5,7 @@ using namespace std;
 // ----- BEGIN CUT HERE -----
 
 #define REP(a,b) for (int a = 0; a < b; a++)
-#define FOR(a,b,c) for (int a = b; a < c; a++)
+#define FOR(a,b,c) for (int a = b; a <= c; a++)
 #define RESET(a,b) memset(a,b,sizeof(a))
 #define LL long long
 
