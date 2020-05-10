@@ -1,3 +1,5 @@
+![A sign with leek in it](https://github.com/gyosh/leekcode/blob/master/logo.png "Leekcode")
+
 # About
 
 Ease the coding & testing phase during [Leetcode](https://leetcode.com/)'s contest.
