@@ -15,7 +15,7 @@ class Cpp:
                 Cpp.format_type(io_spec.input_vtypes[i]),
                 io_spec.input_names[i]
             ))
-        var_inits.append('{} __expected, __answer;'.format(Cpp.format_type(output_vtype)));
+        var_inits.append(template_output_init_cpp.format(Cpp.format_type(output_vtype)));
 
         return template_cpp.format(
                 problem_title=problem.title,

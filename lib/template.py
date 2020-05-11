@@ -38,6 +38,8 @@ int main() {{
 }}
 '''
 
+template_output_init_cpp = '{} _expected, _answer;'
+
 template_testcases_cpp = '''
   solution = Solution();
   nTc++;
