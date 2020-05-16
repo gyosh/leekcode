@@ -120,7 +120,9 @@ else:
 
 '''
 
-template_testcases_py = 'passing += runTc(\'{tc_name}\', {inputs_init}, {output_value})'
+template_testcases_py = '''{inputs_init}
+passing += runTc(\'{tc_name}\', {input_params}, {output_value})
+'''
 
 # template_assertion_py = '''if _expected == _answer:
 #     passing += 1

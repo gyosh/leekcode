@@ -149,11 +149,15 @@ class Py:
             io_spec = tc.io_spec
             input_inits = []
             for i in range(io_spec.get_input_size()):
-                input_inits.append(Py.format_value_for_init(tc.inputs[i]))
+                input_inits.append('{} = {}'.format(
+                    io_spec.input_names[i],
+                    Py.format_value_for_init(tc.inputs[i])
+                ))
 
             tc_block = template_testcases_py.format(
                 tc_name=tc.title,
-                inputs_init=', '.join(input_inits),
+                inputs_init='\n'.join(input_inits),
+                input_params=', '.join(io_spec.input_names),
                 output_value=Py.format_value_for_init(tc.output),
             )
 
