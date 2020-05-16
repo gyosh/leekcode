@@ -120,37 +120,42 @@ class Py:
     def generate(problem, skip_check):
         io_spec = problem.io_spec
         output_vtype = io_spec.output_vtype;
+
+        run_function = ''
+        if skip_check:
+            run_function = template_run_function_skip_check_py.format(
+                method_name=problem.method_name,
+                param_names=', '.join(io_spec.input_names)
+            )
+        else:
+            run_function = template_run_function_py.format(
+                method_name=problem.method_name,
+                param_names=', '.join(io_spec.input_names)
+            )
+
         return template_py.format(
                 problem_title=problem.title,
                 method_name=problem.method_name,
+                run_function=run_function,
                 input_params=', '.join(io_spec.input_names),
-                testcases=Py.format_testcases(problem.method_name, problem.testcases, skip_check)
+                testcases=Py.format_testcases(problem.method_name, problem.testcases)
             )
 
 
     @staticmethod
-    def format_testcases(method_name, testcases, skip_check):
+    def format_testcases(method_name, testcases):
         results = []
         for tc in testcases:
             io_spec = tc.io_spec
             input_inits = []
             for i in range(io_spec.get_input_size()):
-                input_inits.append('{} = {};'.format(
-                    io_spec.input_names[i],
-                    Py.format_value_for_init(tc.inputs[i])
-                ))
+                input_inits.append(Py.format_value_for_init(tc.inputs[i]))
 
             tc_block = template_testcases_py.format(
-                inputs_init='\n'.join(input_inits),
+                tc_name=tc.title,
+                inputs_init=', '.join(input_inits),
                 output_value=Py.format_value_for_init(tc.output),
-                method_name=method_name,
-                param_names=', '.join(io_spec.input_names)
             )
-
-            if skip_check:
-                tc_block += template_no_assertion_py.format(tc_name=tc.title)
-            else:
-                tc_block += template_assertion_py.format(tc_name=tc.title)
 
             results.append(tc_block)
         return '\n'.join(results)

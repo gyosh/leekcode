@@ -110,7 +110,7 @@ class Solution:
 
 nTc = 0
 passing = 0
-
+{run_function}
 {testcases}
 
 if passing == nTc:
@@ -120,23 +120,43 @@ else:
 
 '''
 
-template_testcases_py = '''
-solution = Solution()
-nTc += 1
-{inputs_init}
-_expected = {output_value}
-_answer = solution.{method_name}({param_names})
-'''
+template_testcases_py = 'passing += runTc(\'{tc_name}\', {inputs_init}, {output_value})'
 
-template_assertion_py = '''if _expected == _answer:
-    passing += 1
-else:
-    print('Error at `{tc_name}`')
+# template_assertion_py = '''if _expected == _answer:
+#     passing += 1
+# else:
+#     print('Error at `{tc_name}`')
+#     print('Expected: {{}}'.format(str(_expected)))
+#     print('Got     : {{}}\\n'.format(str(_answer)))
+# '''
+
+# template_no_assertion_py = '''print('On `{tc_name}`')
+# print('Got: {{}}\\n'.format(str(_answer)))
+# passing += 1
+# '''
+
+template_run_function_py='''
+def runTc(_name, {param_names}, _expected):
+    global nTc
+    nTc += 1
+
+    _answer = Solution().{method_name}({param_names})
+    if _expected == _answer:
+        return 1
+    print('Error at `{{}}`'.format(_name))
     print('Expected: {{}}'.format(str(_expected)))
     print('Got     : {{}}\\n'.format(str(_answer)))
+    return 0
 '''
 
-template_no_assertion_py = '''print('On `{tc_name}`')
-print('Got: {{}}\\n'.format(str(_answer)))
-passing += 1
+template_run_function_skip_check_py='''
+def runTc(_name, {param_names}, _expected=None):
+    global nTc
+    nTc += 1
+
+    _answer = Solution().{method_name}({param_names})
+    print('On `{{}}`'.format(_name))
+    print('Got: {{}}\\n'.format(str(_answer)))    
+    return 1
 '''
+
