@@ -11,6 +11,7 @@ using namespace std;
 
 const int INF = 2123123123;
 const int MOD = 1000000007;
+const double EPS = 1e-9;
 
 class Solution {{
 public:
@@ -96,11 +97,13 @@ string outputToStr{depth}(vector<{child_type}> &output) {{
 
 template_py = '''# {problem_title}
 from collections import *
+import math
 
 # ----- BEGIN CUT HERE -----
 
 MOD = 1000000007
 INF = 2123123123
+EPS = 1e-9
 
 class Solution:
     def {method_name}(self, {input_params}):
@@ -117,25 +120,12 @@ if passing == nTc:
     print('No error!')
 else:
     print('FAIL!!!')
-
 '''
 
 template_testcases_py = '''{inputs_init}
-passing += runTc(\'{tc_name}\', {input_params}, {output_value})
+_expected = {output_value}
+passing += runTc(\'{tc_name}\', {input_params}, _expected)
 '''
-
-# template_assertion_py = '''if _expected == _answer:
-#     passing += 1
-# else:
-#     print('Error at `{tc_name}`')
-#     print('Expected: {{}}'.format(str(_expected)))
-#     print('Got     : {{}}\\n'.format(str(_answer)))
-# '''
-
-# template_no_assertion_py = '''print('On `{tc_name}`')
-# print('Got: {{}}\\n'.format(str(_answer)))
-# passing += 1
-# '''
 
 template_run_function_py='''
 def runTc(_name, {param_names}, _expected):
@@ -161,4 +151,3 @@ def runTc(_name, {param_names}, _expected=None):
     print('Got: {{}}\\n'.format(str(_answer)))    
     return 1
 '''
-
