@@ -96,6 +96,16 @@ else:
 Tested only on recent contest problems.
 No guarantee it works all the time, especially when the problem's HTML format changes, or if the problem uses objects in the IO.
 
+
+# Contributing
+
+Contributions as issue or pull request are welcome.
+
+Be sure to add and run unit test if making any changes.
+```
+python -m unittest discover test
+```
+
 # License
 
 MIT.

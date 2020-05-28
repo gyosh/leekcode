@@ -4,10 +4,10 @@ from .phrase_iterator import PhraseIterator
 
 '''
 Example for s:
-  numPerson = 5, love = [1, 4, 2, 3, 0]
+  numPerson = 5, love = [1,4,2,3,0]
 
 value_only is used when s has no variable name, e.g:
-  ["typically", "on", "output"]
+  ["typically","on","output"]
 
 '''
 def extract_variables(s, value_only=False):
@@ -34,6 +34,10 @@ def extract_variables(s, value_only=False):
             vtype = VType(VType.BOOLEAN)
             value = True if c == 't' else False
             it.skip(str(value).lower())
+        elif c == 'n':
+            vtype = VType(VType.NULL)
+            value = None
+            it.skip('null')
         elif (c == '-') or (('0' <= c) and (c <= '9')):
             vtype = VType(VType.INTEGER)
             value = int(it.skip_r(r'[-0-9]+'))
@@ -41,10 +45,12 @@ def extract_variables(s, value_only=False):
             vtype = VType(VType.LIST)
             value = []
             it.skip('[')
-            element_type = None
+            element_type = VType(VType.NULL)
             while it.current_char() != ']':
-                element_type, element_value = parse_type_and_value()
+                candidate_element_type, element_value = parse_type_and_value()
                 value.append(element_value)
+                if not candidate_element_type.is_ambiguous():
+                    element_type = candidate_element_type
                 if not it.can_skip(','):
                     break
                 it.skip(',')
