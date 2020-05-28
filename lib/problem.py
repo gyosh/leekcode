@@ -6,6 +6,7 @@ from .phrase_iterator import PhraseIterator
 from .vtype import VType
 from .io_spec import IoSpec
 from .testcase import TestCase
+from .util import extract_variables
 
 # <p><strong>Example 1:</strong></p>
 
@@ -43,15 +44,17 @@ class Problem:
             input_s = html.unescape(input_s).strip()
             output_s = html.unescape(output_s).strip()
 
-            input_vars = self.__extract_variables(input_s)
-            output = self.__extract_variables(output_s, value_only=True)[0]
+            input_vars = extract_variables(input_s)
+            output = extract_variables(output_s, value_only=True)[0]
 
             if io_spec is None:
-                io_spec = IoSpec(
+                io_spec_candidate = IoSpec(
                     input_names=[v[0] for v in input_vars],
                     input_vtypes=[v[1] for v in input_vars],
                     output_vtype=output[1]
                 )
+                if not io_spec_candidate.is_ambiguous():
+                    io_spec = io_spec_candidate
 
             tcs.append(TestCase(
                 title,
@@ -60,66 +63,6 @@ class Problem:
                 output=output[2]
             ))
         return io_spec, tcs
-
-
-    def __extract_variables(self, s, value_only=False):
-        result = []
-        it = PhraseIterator(s + ',')
-
-        def parse_type_and_value():
-            c = it.current_char()
-
-            vtype = None
-            value = None
-            if c == '"':
-                vtype = VType(VType.STRING)
-                it.skip('"')
-                value = ''
-                # Process per escape section
-                while it.current_char() != '"':
-                    value += it.skip_r(r'[^\\"]+')
-                    if it.current_char() == '\\':
-                        it.next_char()
-                        value += it.next_char()
-                it.skip('"')
-            elif c in 'tf':
-                vtype = VType(VType.BOOLEAN)
-                value = True if c == 't' else False
-                it.skip(str(value).lower())
-            elif (c == '-') or (('0' <= c) and (c <= '9')):
-                vtype = VType(VType.INTEGER)
-                value = int(it.skip_r(r'[-0-9]+'))
-            else:
-                vtype = VType(VType.LIST)
-                value = []
-                it.skip('[')
-                element_type = None
-                while it.current_char() != ']':
-                    element_type, element_value = parse_type_and_value()
-                    value.append(element_value)
-                    if not it.can_skip(','):
-                        break
-                    it.skip(',')
-                vtype.set_child(element_type)
-                it.skip(']')
-            return vtype, value
-
-        while not it.end():
-            name = None
-            if not value_only:
-                name = it.skip_r(r'[_a-zA-Z0-9]+').strip()
-                logging.info('Found variable name: `%s`', name)
-
-                it.skip_r(r'\s*')
-                it.skip_r('=')
-                it.skip_r(r'\s*')
-            vtype, value = parse_type_and_value()
-            logging.info('Found variable type : value: `%s`: `%s`', vtype, value)
-            result.append((name, vtype, value))
-            it.skip_r(r'\s*')
-            it.skip_r(r',')
-            it.skip_r(r'\s*')
-        return result
 
 
     def __extract_method_name(self, problem_html):

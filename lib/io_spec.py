@@ -6,3 +6,6 @@ class IoSpec:
 
     def get_input_size(self):
         return len(self.input_names)
+
+    def is_ambiguous(self):
+        return self.output_vtype.is_ambiguous() or any([t.is_ambiguous() for t in self.input_vtypes])
