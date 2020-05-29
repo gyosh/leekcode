@@ -68,7 +68,7 @@ def extract_variables(s, value_only=False):
             it.skip_r('=')
             it.skip_r(r'\s*')
         vtype, value = parse_type_and_value()
-        logging.info('Found variable type : value: `%s`: `%s`', vtype, value)
+        logging.info('Found variable type & value: %s: %s', vtype, value)
         result.append((name, vtype, value))
         it.skip_r(r'\s*')
         it.skip_r(r',')

@@ -4,6 +4,9 @@ class VType:
     STRING = 'STRING'
     NULL = 'NULL'
     LIST = 'LIST'
+    BINARY_TREE = 'BINARY_TREE'
+
+    COMPOUND_TYPES = [LIST, BINARY_TREE]
 
     def __init__(self, value, child=None):
         self.value = value
@@ -20,12 +23,12 @@ class VType:
         self.child = child
 
 
-    def is_type(self, value):
+    def is_etype(self, value):
         return self.value == value
 
 
     def get_hierarchy(self):
-        if self.value != VType.LIST:
+        if self.value not in VType.COMPOUND_TYPES:
             return [self.value]
         return [self.value] + self.child.get_hierarchy()
 
@@ -33,7 +36,7 @@ class VType:
     def is_ambiguous(self):
         if self.value == VType.NULL:
             return True
-        if self.value != VType.LIST:
+        if self.value not in VType.COMPOUND_TYPES:
             return False
         return (self.child is None) or self.child.is_ambiguous()
 

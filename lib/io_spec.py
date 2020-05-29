@@ -9,3 +9,6 @@ class IoSpec:
 
     def is_ambiguous(self):
         return self.output_vtype.is_ambiguous() or any([t.is_ambiguous() for t in self.input_vtypes])
+
+    def has_etype(self, etype):
+        return (self.output_vtype.is_etype(etype)) or any([t.is_etype(etype) for t in self.input_vtypes])

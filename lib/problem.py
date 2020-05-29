@@ -16,14 +16,13 @@ from .util import extract_variables
 # </pre>
 
 class Problem:
-    def __init__(self, problem_html):
+    def __init__(self, problem_html, binary_tree_param_indexes=[]):
         self.html = problem_html
         self.title = re.findall(r'<title>(.*?)</title>', problem_html)[0]
-        self.io_spec, self.testcases = self.__unpack_testcases(problem_html)
+        self.io_spec, self.testcases = self.__unpack_testcases(problem_html, binary_tree_param_indexes)
         self.method_name = self.__extract_method_name(problem_html)
-        logging.info(self.method_name)
 
-    def __unpack_testcases(self, problem_html):
+    def __unpack_testcases(self, problem_html, binary_tree_param_indexes):
         io_spec = None
         tcs = []
         seen_title = set()
@@ -62,6 +61,15 @@ class Problem:
                 inputs=[v[2] for v in input_vars],
                 output=output[2]
             ))
+
+        for idx in binary_tree_param_indexes:
+            if idx == -1:
+                io_spec.output_vtype.value = VType.BINARY_TREE
+                logging.info('Casted output type to %s', io_spec.output_vtype)
+            else:
+                io_spec.input_vtypes[idx].value = VType.BINARY_TREE
+                logging.info('Casted `%s` type to %s', io_spec.input_names[idx], io_spec.input_vtypes[idx])
+
         return io_spec, tcs
 
 
