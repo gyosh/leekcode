@@ -96,6 +96,7 @@ else:
 Tested only on recent contest problems.
 No guarantee it works all the time, especially when the problem's HTML format changes, or if the problem uses objects in the IO.
 
+Use at your own risk.
 
 # Contributing
 
