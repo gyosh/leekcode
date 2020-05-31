@@ -68,17 +68,17 @@ Python 3.
 
 # How To
 
-1. Clone this repository.
-2. Open the problem page you're trying to solve, like [this one](https://leetcode.com/contest/biweekly-contest-25/problems/kids-with-the-greatest-number-of-candies/).
-3. Save the html page.
+1. Download the most [recent release](https://github.com/gyosh/leekcode/releases) or clone this repository.
+2. Open the problem page you're trying to solve in the browser, like [this one](https://leetcode.com/contest/biweekly-contest-25/problems/kids-with-the-greatest-number-of-candies/).
+3. Save the html page, say that the saved file is prob.html.
 4. On your terminal, run
 ```
-$ python3 /path/to/cloned/repository/main.py -l py /path/to/saved/problem/html > solution.py
+$ python3 /path/to/cloned/repository/main.py -l py /path/to/saved/problem/prob.html > solution.py
 ```
 Here, we are generating template for Python3. See next section for list of supported languages.
 
 5. Code your solution in `solution.py`.
-6. When done, run `python3 solution.py` to test your code against all sample testcases.
+6. When done, run `python3 solution.py` to test your code against all sample testcases. The script will tell you if there is no error or there is failing case(s).
 7. When ready for submission, cut the class portion of `solution.py` and submit it to Leetcode.
 
 See help for more complex use cases.
