@@ -29,7 +29,7 @@ def main():
     parser.add_argument('input', help='The html file for downloaded problem page');
     parser.add_argument('-l', '--language', choices=LANGUAGE_MAPPING.keys(), required=True, help='Language of the template to generate.')
     parser.add_argument('-e', '--header', help='A .txt file to be included in the generated code as header (commonly for defining constants or common functions).')
-    parser.add_argument('-t', '--binary-tree', default='', help='Comma separated indexes of the input parameters/output to be treated as binary tree. Use \'i\' prefix for input followed by one based index, and \'o\' for output. E.g: "i2,o" means 2nd input parameter and output is binary tree')
+    parser.add_argument('-t', '--binary-tree', default='', help='Comma separated indexes of the input parameters/output to be treated as binary tree. Use \'i\' prefix for input followed by one based index, and \'o\' for output. E.g: "i2,o" means 2nd input parameter and output is binary tree. You need to give this information since binary tree is provided as list in Leetcode\'s testcase.')
     parser.add_argument('-x', '--skip-check', action='store_true', help='If set, will not check output with expected output. Use this for multiple possible output problems.')
     args = parser.parse_args()
 
