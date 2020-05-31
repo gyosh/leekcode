@@ -182,6 +182,8 @@ class Python3(LanguageInterface):
         elif vtype.is_etype(VType.LIST):
             return '[' + ','.join([Python3.format_value_for_init(vtype.child, x) for x in value]) + ']'
         elif vtype.is_etype(VType.BINARY_TREE):
+            if not vtype.child.is_etype(VType.INTEGER):
+                raise Exception('Unsupported binary tree inner data type: {}'.format(vtype.child))
             return 'TreeNode.from_list([' + ','.join([Python3.format_value_for_init(vtype.child, x) for x in value]) + '])'
         raise Exception('Unknown data type: {} with value {}'.format(vtype, value))
 
