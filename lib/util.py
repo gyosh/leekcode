@@ -38,9 +38,14 @@ def extract_variables(s, value_only=False):
             vtype = VType(VType.NULL)
             value = None
             it.skip('null')
-        elif (c == '-') or (('0' <= c) and (c <= '9')):
-            vtype = VType(VType.INTEGER)
-            value = int(it.skip_r(r'[-0-9]+'))
+        elif (c in '-.') or (('0' <= c) and (c <= '9')):
+            value_s = it.skip_r(r'[-0-9.]+')
+            if '.' in value_s:
+                vtype = VType(VType.FLOAT)
+                value = float(value_s)
+            else:
+                vtype = VType(VType.INTEGER)
+                value = int(value_s)
         else:
             vtype = VType(VType.LIST)
             value = []
@@ -49,7 +54,7 @@ def extract_variables(s, value_only=False):
             while it.current_char() != ']':
                 candidate_element_type, element_value = parse_type_and_value()
                 value.append(element_value)
-                if not candidate_element_type.is_ambiguous():
+                if candidate_element_type.is_superset_of(element_type):
                     element_type = candidate_element_type
                 if not it.can_skip(','):
                     break

@@ -36,7 +36,7 @@ def runTc(_name, {param_names}, _expected):
     nTc += 1
 
     _answer = Solution().{method_name}({param_names})
-    if _expected == _answer:
+    if {equality_check}:
         return 1
     print('Error at `{{}}`'.format(_name))
     print('Expected: {{}}'.format(str(_expected)))
@@ -125,7 +125,8 @@ class Python3(LanguageInterface):
         else:
             run_function = template_run_function.format(
                 method_name=problem.method_name,
-                param_names=', '.join(io_spec.input_names)
+                param_names=', '.join(io_spec.input_names),
+                equality_check=Python3.format_equality(output_vtype)
             )
 
         auxiliary_classes = ''
@@ -170,6 +171,8 @@ class Python3(LanguageInterface):
     def format_value_for_init(vtype, value):
         if vtype.is_etype(VType.INTEGER):
             return str(value)
+        if vtype.is_etype(VType.FLOAT):
+            return str(value)
         elif vtype.is_etype(VType.STRING):
             return "'" + value + "'"
         elif vtype.is_etype(VType.BOOLEAN):
@@ -181,3 +184,11 @@ class Python3(LanguageInterface):
         elif vtype.is_etype(VType.BINARY_TREE):
             return 'TreeNode.from_list([' + ','.join([Python3.format_value_for_init(vtype.child, x) for x in value]) + '])'
         raise Exception('Unknown data type: {} with value {}'.format(vtype, value))
+
+
+    @staticmethod
+    def format_equality(vtype):
+        if vtype.is_etype(VType.FLOAT):
+            return 'abs(_expected - _answer) < 1e-5'
+        else:
+            return '_expected == _answer'

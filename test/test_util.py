@@ -4,12 +4,35 @@ from lib.util import extract_variables
 from lib.vtype import VType
 
 class TestUtil(unittest.TestCase):
+    def assertFloatList(self, expected, got):
+        self.assertEqual(len(expected), len(got))
+        for i in range(len(expected)):
+            self.assertEqual(expected[i][0], got[i][0])
+            self.assertEqual(expected[i][1], got[i][1])
+            self.assertAlmostEqual(expected[i][2], got[i][2])
+
     def test_extract_variables_single(self):
         self.assertEqual([('a', VType(VType.INTEGER), 12)], extract_variables('a = 12'))
         self.assertEqual([('numPerson', VType(VType.INTEGER), 999)], extract_variables('numPerson = 999'))
         self.assertEqual([('numPerson', VType(VType.INTEGER), 0)], extract_variables('numPerson = 0'))
         self.assertEqual([('numPerson', VType(VType.INTEGER), -5)], extract_variables('numPerson = -5'))
         self.assertEqual([('numPerson', VType(VType.INTEGER), -51)], extract_variables('numPerson = -51'))
+
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), 0.51)], extract_variables('prob = 0.51'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), 0.51)], extract_variables('prob = .51'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), 0.0051)], extract_variables('prob = .0051'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), 1.51)], extract_variables('prob = 1.51'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), 10.51)], extract_variables('prob = 10.51'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), 10.0051)], extract_variables('prob = 10.0051'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), 10.)], extract_variables('prob = 10.'))
+
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), -0.51)], extract_variables('prob = -0.51'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), -0.51)], extract_variables('prob = -.51'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), -0.0051)], extract_variables('prob = -.0051'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), -1.51)], extract_variables('prob = -1.51'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), -10.51)], extract_variables('prob = -10.51'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), -10.0051)], extract_variables('prob = -10.0051'))
+        self.assertAlmostEqual([('prob', VType(VType.FLOAT), -10.)], extract_variables('prob = -10.'))
 
         self.assertEqual([('b', VType(VType.BOOLEAN), True)], extract_variables('b = true'))
         self.assertEqual([('b', VType(VType.BOOLEAN), False)], extract_variables('b = false'))
@@ -25,6 +48,9 @@ class TestUtil(unittest.TestCase):
         self.assertEqual([('ages', VType(VType.LIST, VType(VType.INTEGER)), [21, 22])], extract_variables('ages = [21,22]'))
         self.assertEqual([('ages', VType(VType.LIST, VType(VType.INTEGER)), [8])], extract_variables('ages = [8]'))
         self.assertEqual([('pos', VType(VType.LIST, VType(VType.INTEGER)), [-54, 0, 11])], extract_variables('pos = [-54,0,11]'))
+
+        self.assertFloatList([('dist', VType(VType.LIST, VType(VType.FLOAT)), [1, 0, 0.5])], extract_variables('dist = [1,0,0.5]'))
+        self.assertFloatList([('dist', VType(VType.LIST, VType(VType.FLOAT)), [-1, 0.242])], extract_variables('dist = [-1.,0.242]'))
 
         # Special case for unknown type
         self.assertEqual([('ages', VType(VType.LIST, VType(VType.NULL)), [])], extract_variables('ages = []'))
@@ -54,8 +80,9 @@ class TestUtil(unittest.TestCase):
             ('name', VType(VType.STRING), 'Kratos'),
             ('age', VType(VType.INTEGER), 9991),
             ('hasChild', VType(VType.BOOLEAN), True),
-            ('blades', VType(VType.LIST, VType(VType.STRING)), ['chaos', 'athena', 'exile', None])
-        ], extract_variables('name = "Kratos", age = 9991, hasChild = true, blades = ["chaos","athena","exile",null]'))
+            ('blades', VType(VType.LIST, VType(VType.STRING)), ['chaos', 'athena', 'exile', None]),
+            ('health', VType(VType.FLOAT), 0.981)
+        ], extract_variables('name = "Kratos", age = 9991, hasChild = true, blades = ["chaos","athena","exile",null], health = 0.981'))
 
 
     def test_extract_variables_value_only(self):
@@ -64,6 +91,22 @@ class TestUtil(unittest.TestCase):
         self.assertEqual([(None, VType(VType.INTEGER), 0)], extract_variables('0', value_only=True))
         self.assertEqual([(None, VType(VType.INTEGER), -5)], extract_variables('-5', value_only=True))
         self.assertEqual([(None, VType(VType.INTEGER), -51)], extract_variables('-51', value_only=True))
+
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), 0.51)], extract_variables('0.51', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), 0.51)], extract_variables('.51', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), 0.0051)], extract_variables('.0051', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), 1.51)], extract_variables('1.51', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), 10.51)], extract_variables('10.51', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), 10.0051)], extract_variables('10.0051', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), 10.)], extract_variables('10.', value_only=True))
+
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), -0.51)], extract_variables('-0.51', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), -0.51)], extract_variables('-.51', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), -0.0051)], extract_variables('-.0051', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), -1.51)], extract_variables('-1.51', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), -10.51)], extract_variables('-10.51', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), -10.0051)], extract_variables('-10.0051', value_only=True))
+        self.assertAlmostEqual([(None, VType(VType.FLOAT), -10.)], extract_variables('-10.', value_only=True))
 
         self.assertEqual([(None, VType(VType.BOOLEAN), True)], extract_variables('true', value_only=True))
         self.assertEqual([(None, VType(VType.BOOLEAN), False)], extract_variables('false', value_only=True))

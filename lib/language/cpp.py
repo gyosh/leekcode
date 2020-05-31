@@ -142,6 +142,12 @@ string outputToStr{depth}(int output) {{
 }}
 '''
 
+print_float = '''
+string outputToStr{depth}(double output) {{
+    return to_string(output);
+}}
+'''
+
 print_string = '''
 string outputToStr{depth}(string output) {{
     return '"' + output + '"';
@@ -262,6 +268,8 @@ class Cpp:
     def format_display_function(vtype, depth=0):
         if vtype.is_etype(VType.INTEGER):
             return print_int.format(depth=Cpp.format_depth_str(depth))
+        if vtype.is_etype(VType.FLOAT):
+            return print_float.format(depth=Cpp.format_depth_str(depth))
         if vtype.is_etype(VType.BOOLEAN):
             return print_boolean.format(depth=Cpp.format_depth_str(depth))
         if vtype.is_etype(VType.STRING):
@@ -287,6 +295,8 @@ class Cpp:
     def format_equality(vtype):
         if vtype.is_etype(VType.BINARY_TREE):
             return 'TreeNode::equal(_expected, _answer)'
+        elif vtype.is_etype(VType.FLOAT):
+            return 'fabs(_expected - _answer) < 1e-5'
         else:
             return '_expected == _answer'
 
@@ -295,6 +305,8 @@ class Cpp:
     def format_type(vtype):
         if vtype.is_etype(VType.INTEGER):
             return 'int'
+        if vtype.is_etype(VType.FLOAT):
+            return 'double'
         if vtype.is_etype(VType.BOOLEAN):
             return 'bool'
         if vtype.is_etype(VType.STRING):
@@ -311,6 +323,8 @@ class Cpp:
     @staticmethod
     def format_value_for_init(vtype, value):
         if vtype.is_etype(VType.INTEGER):
+            return str(value)
+        if vtype.is_etype(VType.FLOAT):
             return str(value)
         elif vtype.is_etype(VType.STRING):
             return "'" + value + "'"

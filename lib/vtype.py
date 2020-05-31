@@ -1,5 +1,6 @@
 class VType:
     INTEGER = 'INTEGER'
+    FLOAT = 'FLOAT'
     BOOLEAN = 'BOOLEAN'
     STRING = 'STRING'
     NULL = 'NULL'
@@ -39,6 +40,23 @@ class VType:
         if self.value not in VType.COMPOUND_TYPES:
             return False
         return (self.child is None) or self.child.is_ambiguous()
+
+
+    def is_superset_of(self, other):
+        if self.value == VType.FLOAT:
+            if other.is_etype(VType.INTEGER):
+                return True
+
+        if self.value in VType.COMPOUND_TYPES:
+            if self.child is None:
+                return False
+            elif other.child is None:
+                return True
+            else: # Both has child  
+                return self.child.is_superset_of(other.child)
+
+        # Anything is superset of NULL
+        return other.is_etype(VType.NULL)
 
 
     def __eq__(self, other):
