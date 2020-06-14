@@ -32,8 +32,12 @@ class Problem:
             it.skip('<p><strong>')
             title = it.seek('</strong></p>')
 
-            it.seek('<pre><strong>Input:</strong>')
-            input_s = it.seek('<strong>Output:</strong>')
+            it.seek('Input:')
+            it.seek('</strong>')
+            input_s = it.seek('<strong>')
+
+            it.seek('Output:')
+            it.seek('</strong>')
             output_s = it.seek_one(['<strong>', '<b>', '</pre>'])
 
             if title in seen_title:
