@@ -3,6 +3,8 @@
 #define FOR(a,b,c) for (int a = b; a <= c; a++)
 #define RESET(a,b) memset(a,b,sizeof(a))
 #define LL long long
+#define MP make_pair
+#define PII pair<int,int>
 
 const int INF = 2123123123;
 const int MOD = 1000000007;

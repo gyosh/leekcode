@@ -327,7 +327,7 @@ class Cpp:
         if vtype.is_etype(VType.FLOAT):
             return str(value)
         elif vtype.is_etype(VType.STRING):
-            return "'" + value + "'"
+            return '"' + value + '"'
         elif vtype.is_etype(VType.BOOLEAN):
             return str(value).lower()
         elif vtype.is_etype(VType.NULL):
