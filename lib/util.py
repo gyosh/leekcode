@@ -56,9 +56,11 @@ def extract_variables(s, value_only=False):
                 value.append(element_value)
                 if candidate_element_type.is_superset_of(element_type):
                     element_type = candidate_element_type
+                it.skip_r(r'\s+')
                 if not it.can_skip(','):
                     break
                 it.skip(',')
+                it.skip_r(r'\s+')
             vtype.set_child(element_type)
             it.skip(']')
         return vtype, value

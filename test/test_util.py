@@ -46,8 +46,13 @@ class TestUtil(unittest.TestCase):
         self.assertEqual([('x', VType(VType.NULL), None)], extract_variables('x = null'))
 
         self.assertEqual([('ages', VType(VType.LIST, VType(VType.INTEGER)), [21, 22])], extract_variables('ages = [21,22]'))
+        self.assertEqual([('ages', VType(VType.LIST, VType(VType.INTEGER)), [21, 22])], extract_variables('ages = [21, 22]'))
+        self.assertEqual([('ages', VType(VType.LIST, VType(VType.INTEGER)), [21, 22])], extract_variables('ages = [21 ,22]'))
+        self.assertEqual([('ages', VType(VType.LIST, VType(VType.INTEGER)), [21, 22])], extract_variables('ages = [21 , 22]'))
         self.assertEqual([('ages', VType(VType.LIST, VType(VType.INTEGER)), [8])], extract_variables('ages = [8]'))
         self.assertEqual([('pos', VType(VType.LIST, VType(VType.INTEGER)), [-54, 0, 11])], extract_variables('pos = [-54,0,11]'))
+        self.assertEqual([('pos', VType(VType.LIST, VType(VType.INTEGER)), [-54, 0, 11])], extract_variables('pos = [-54, 0, 11]'))
+        self.assertEqual([('pos', VType(VType.LIST, VType(VType.INTEGER)), [-54, 0, 11])], extract_variables('pos = [-54,\n0,\n11]'))
 
         self.assertFloatList([('dist', VType(VType.LIST, VType(VType.FLOAT)), [1, 0, 0.5])], extract_variables('dist = [1,0,0.5]'))
         self.assertFloatList([('dist', VType(VType.LIST, VType(VType.FLOAT)), [-1, 0.242])], extract_variables('dist = [-1.,0.242]'))
